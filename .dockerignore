@@ -1,0 +1,12 @@
+.git
+.env
+outputs
+benchmarks
+tests
+__pycache__
+*.pyc
+*.wav
+*.pt2
+*.safetensors
+*.log
+rendered.yaml

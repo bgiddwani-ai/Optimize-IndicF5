@@ -1,0 +1,192 @@
+{
+  "passed": false,
+  "finite_passed": true,
+  "performance_policy": "Exploratory performance allowed for finite candidates; failed numerical gates remain failed and prevent qualification.",
+  "gate": {
+    "relative_l2_max": 0.02,
+    "cosine_min": 0.999
+  },
+  "comparison": "AOTI versus same prepared eager BF16 graph",
+  "rows": [
+    {
+      "frames": 128,
+      "time": 0.0,
+      "relative_l2": 0.005859482567757368,
+      "cosine": 0.9999831914901733,
+      "max_abs": 0.0625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 128,
+      "time": 0.37,
+      "relative_l2": 0.019846124574542046,
+      "cosine": 0.9998030662536621,
+      "max_abs": 0.2587890625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 128,
+      "time": 0.95,
+      "relative_l2": 0.06850313395261765,
+      "cosine": 0.9976601004600525,
+      "max_abs": 0.78125,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 256,
+      "time": 0.0,
+      "relative_l2": 0.00759182870388031,
+      "cosine": 0.999971330165863,
+      "max_abs": 0.0625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 256,
+      "time": 0.37,
+      "relative_l2": 0.01981545239686966,
+      "cosine": 0.9998036623001099,
+      "max_abs": 0.1875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 256,
+      "time": 0.95,
+      "relative_l2": 0.055715832859277725,
+      "cosine": 0.9984583854675293,
+      "max_abs": 0.97265625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 512,
+      "time": 0.0,
+      "relative_l2": 0.006318597588688135,
+      "cosine": 0.9999806880950928,
+      "max_abs": 0.0625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 512,
+      "time": 0.37,
+      "relative_l2": 0.015132996253669262,
+      "cosine": 0.9998854398727417,
+      "max_abs": 0.21875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 512,
+      "time": 0.95,
+      "relative_l2": 0.04672214016318321,
+      "cosine": 0.9989163875579834,
+      "max_abs": 0.828125,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 1024,
+      "time": 0.0,
+      "relative_l2": 0.005968214478343725,
+      "cosine": 0.9999824166297913,
+      "max_abs": 0.046875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 1024,
+      "time": 0.37,
+      "relative_l2": 0.013262585736811161,
+      "cosine": 0.9999120831489563,
+      "max_abs": 0.125,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 1024,
+      "time": 0.95,
+      "relative_l2": 0.05504389852285385,
+      "cosine": 0.998485803604126,
+      "max_abs": 1.984375,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 2048,
+      "time": 0.0,
+      "relative_l2": 0.005923022050410509,
+      "cosine": 0.999982476234436,
+      "max_abs": 0.1875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 2048,
+      "time": 0.37,
+      "relative_l2": 0.013677330687642097,
+      "cosine": 0.9999067783355713,
+      "max_abs": 0.197021484375,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 2048,
+      "time": 0.95,
+      "relative_l2": 0.0630173608660698,
+      "cosine": 0.9980173110961914,
+      "max_abs": 2.1474609375,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 4096,
+      "time": 0.0,
+      "relative_l2": 0.005740600172430277,
+      "cosine": 0.9999836683273315,
+      "max_abs": 0.0625,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": true
+    },
+    {
+      "frames": 4096,
+      "time": 0.37,
+      "relative_l2": 0.020726576447486877,
+      "cosine": 0.9997851848602295,
+      "max_abs": 0.26171875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    },
+    {
+      "frames": 4096,
+      "time": 0.95,
+      "relative_l2": 0.05560549721121788,
+      "cosine": 0.9984564781188965,
+      "max_abs": 1.875,
+      "finite": true,
+      "output_dtype": "torch.bfloat16",
+      "passed": false
+    }
+  ]
+}

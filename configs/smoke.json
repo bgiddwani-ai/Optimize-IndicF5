@@ -1,0 +1,15 @@
+{
+  "nfe": 4,
+  "groups": [
+    "small"
+  ],
+  "concurrencies": [
+    1
+  ],
+  "minimum_requests": 1,
+  "quality_enabled": false,
+  "probe_frames": [
+    128,
+    512
+  ]
+}

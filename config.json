@@ -1,0 +1,17 @@
+{
+  "nfe": 32,
+  "cpu_threads": 4,
+  "compile_threads": 8,
+  "max_frames": 4096,
+  "probe_frames": [128, 256, 512, 1024, 2048, 4096],
+  "groups": ["small", "medium", "large"],
+  "concurrencies": [1, 2, 8, 16, 32],
+  "minimum_requests": 4,
+  "warmups": 1,
+  "quality_enabled": true,
+  "numerical_l2_max": 0.02,
+  "numerical_cosine_min": 0.999,
+  "cer_ceiling": 0.10,
+  "serve_backend": "fp32_eager",
+  "allow_unqualified_aoti": false
+}

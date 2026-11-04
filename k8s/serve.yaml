@@ -1,0 +1,155 @@
+"apiVersion": "v1"
+"kind": "Namespace"
+"metadata":
+  "name": "indicf5"
+---
+"apiVersion": "v1"
+"kind": "PersistentVolumeClaim"
+"metadata":
+  "namespace": "indicf5"
+  "name": "indicf5-data"
+"spec":
+  "accessModes":
+    - "ReadWriteOnce"
+  "resources":
+    "requests":
+      "storage": "40Gi"
+---
+"apiVersion": "v1"
+"kind": "ConfigMap"
+"metadata":
+  "namespace": "indicf5"
+  "name": "cfg-run-001"
+"data":
+  "config.json": "{\n  \"nfe\": 32,\n  \"cpu_threads\": 4,\n  \"compile_threads\": 8,\n  \"max_frames\": 4096,\n  \"probe_frames\": [\n    128,\n    256,\n    512,\n    1024,\n    2048,\n    4096\n  ],\n  \"groups\": [\n    \"small\",\n    \"medium\",\n    \"large\"\n  ],\n  \"concurrencies\": [\n    1,\n    2,\n    8,\n    16,\n    32\n  ],\n  \"minimum_requests\": 4,\n  \"warmups\": 1,\n  \"quality_enabled\": true,\n  \"numerical_l2_max\": 0.02,\n  \"numerical_cosine_min\": 0.999,\n  \"cer_ceiling\": 0.1,\n  \"serve_backend\": \"fp32_eager\",\n  \"allow_unqualified_aoti\": false\n}"
+---
+"apiVersion": "apps/v1"
+"kind": "Deployment"
+"metadata":
+  "namespace": "indicf5"
+  "name": "indicf5"
+"spec":
+  "replicas": 1
+  "strategy":
+    "type": "Recreate"
+  "selector":
+    "matchLabels":
+      "app.kubernetes.io/name": "indicf5"
+      "indicf5/mode": "serve"
+  "template":
+    "metadata":
+      "labels":
+        "app.kubernetes.io/name": "indicf5"
+        "indicf5/run": "run-001"
+        "indicf5/mode": "serve"
+    "spec":
+      "automountServiceAccountToken": false
+      "securityContext":
+        "runAsUser": 1000
+        "runAsGroup": 1000
+        "fsGroup": 1000
+        "fsGroupChangePolicy": "OnRootMismatch"
+        "runAsNonRoot": true
+        "seccompProfile":
+          "type": "RuntimeDefault"
+      "restartPolicy": "Always"
+      "terminationGracePeriodSeconds": 45
+      "dnsPolicy": "ClusterFirst"
+      "containers":
+        -
+          "name": "app"
+          "image": "ghcr.io/your-account/indicf5-aoti:latest"
+          "imagePullPolicy": "IfNotPresent"
+          "args":
+            - "--serve"
+          "env":
+            -
+              "name": "CONFIG_FILE"
+              "value": "/etc/indicf5/config.json"
+            -
+              "name": "RUN_ID"
+              "value": "run-001"
+            -
+              "name": "HF_TOKEN"
+              "valueFrom":
+                "secretKeyRef":
+                  "name": "indicf5-hf"
+                  "key": "HF_TOKEN"
+          "resources":
+            "requests":
+              "cpu": "4"
+              "memory": "16Gi"
+              "nvidia.com/gpu": 1
+            "limits":
+              "cpu": "8"
+              "memory": "32Gi"
+              "nvidia.com/gpu": 1
+          "securityContext":
+            "allowPrivilegeEscalation": false
+            "readOnlyRootFilesystem": true
+            "capabilities":
+              "drop":
+                - "ALL"
+          "volumeMounts":
+            -
+              "name": "data"
+              "mountPath": "/data"
+            -
+              "name": "config"
+              "mountPath": "/etc/indicf5"
+              "readOnly": true
+            -
+              "name": "tmp"
+              "mountPath": "/tmp"
+            -
+              "name": "shm"
+              "mountPath": "/dev/shm"
+          "ports":
+            -
+              "name": "http"
+              "containerPort": 8000
+          "readinessProbe":
+            "httpGet":
+              "path": "/healthz"
+              "port": "http"
+            "periodSeconds": 10
+          "startupProbe":
+            "httpGet":
+              "path": "/healthz"
+              "port": "http"
+            "periodSeconds": 10
+            "failureThreshold": 180
+      "volumes":
+        -
+          "name": "data"
+          "persistentVolumeClaim":
+            "claimName": "indicf5-data"
+        -
+          "name": "config"
+          "configMap":
+            "name": "cfg-run-001"
+        -
+          "name": "tmp"
+          "emptyDir":
+            "sizeLimit": "8Gi"
+        -
+          "name": "shm"
+          "emptyDir":
+            "medium": "Memory"
+            "sizeLimit": "2Gi"
+---
+"apiVersion": "v1"
+"kind": "Service"
+"metadata":
+  "namespace": "indicf5"
+  "name": "indicf5"
+"spec":
+  "type": "ClusterIP"
+  "selector":
+    "app.kubernetes.io/name": "indicf5"
+    "indicf5/mode": "serve"
+  "ports":
+    -
+      "name": "http"
+      "port": 8000
+      "targetPort": "http"

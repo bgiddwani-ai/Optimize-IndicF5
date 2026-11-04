@@ -56,6 +56,7 @@ Authenticate Docker to that registry using its normal login procedure. Then:
 
 Open `outputs/run-001/reports/report.html`. The full matrix is also available in
 `reports/summary.csv`, with raw requests, WAVs and logs under `evidence/`.
+The resolved `config.json` is downloaded alongside these directories.
 Read `evidence/qualification.json` separately: a completed Job means that the
 measurements finished, not that the candidate passed its numerical/ASR gates.
 
@@ -246,6 +247,13 @@ python3 -m unittest discover -s tests -v
 CPU CI checks configuration, rendering and source syntax. It does not claim to
 test CUDA inference. GPU validation is performed by the Kubernetes Job itself;
 inspect the downloaded report and `qualification.json` for each run.
+
+An actual Kubernetes smoke run completed all three backends, 3/3 measured
+requests, 16 compiled DiT calls, HTML report generation and CPU-only PVC download.
+The optional Deployment also returned finite 24 kHz audio with its FP32 default.
+The [sanitized validation summary](validation/kubernetes-smoke.json) records the
+scope: NFE=4, ASR disabled, and no quality qualification. This checks execution;
+the full NFE=32 performance/quality matrix must be rerun on the target hardware.
 
 Source pins: IndicF5 `13f7c4d627cc10111aea8fe9c0039462cacacdc7`, model revision
 `fb652a96e508091045890dae5bb99fe511facbcf`, and checkpoint SHA256

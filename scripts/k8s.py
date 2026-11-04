@@ -188,8 +188,8 @@ def download():
     try:
         if created:
             kubectl('wait', '--for=condition=Ready', 'pod/'+reader, '--timeout=300s')
-        for directory in ('reports', 'evidence'):
-            kubectl('cp', '-c', container, f'{pod}:/data/runs/{opt["run_id"]}/{directory}', str(target/directory))
+        for name in ('reports', 'evidence', 'config.json'):
+            kubectl('cp', '-c', container, f'{pod}:/data/runs/{opt["run_id"]}/{name}', str(target/name))
         print(f'Results: outputs/{opt["run_id"]}/reports/report.html')
     finally:
         if created:

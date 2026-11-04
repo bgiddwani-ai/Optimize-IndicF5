@@ -1,0 +1,35 @@
+{
+  "workflow": "Kubernetes Job requesting one nvidia.com/gpu",
+  "configuration": "configs/smoke.json",
+  "nfe": 4,
+  "job_completed": true,
+  "backends_verified": [
+    "fp32_eager",
+    "bf16_eager",
+    "bf16_aoti"
+  ],
+  "measured_requests": 3,
+  "failed_requests": 0,
+  "compiled_dit_calls": 16,
+  "fresh_process_package_validation": true,
+  "finite_audio": true,
+  "within_backend_deterministic": true,
+  "report_generated": true,
+  "cpu_only_pvc_download_verified": true,
+  "qualification": {
+    "qualified": false,
+    "numerical_gate_passed": false,
+    "asr_gate_passed": false,
+    "asr_skipped": true,
+    "finite_passed": true,
+    "measured_requests": 3
+  },
+  "optional_serving": {
+    "ready": true,
+    "default_backend": "fp32_eager",
+    "finite_audio": true,
+    "sample_rate": 24000,
+    "compiled_package_loaded": false
+  },
+  "scope": "Deployment/inference smoke only. ASR disabled; not a quality qualification or a replacement for the NFE=32 matrix."
+}

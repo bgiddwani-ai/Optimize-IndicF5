@@ -31,5 +31,6 @@
     "sample_rate": 24000,
     "compiled_package_loaded": false
   },
-  "scope": "Deployment/inference smoke only. ASR disabled; not a quality qualification or a replacement for the NFE=32 matrix."
+  "scope": "Deployment/inference smoke only. ASR disabled; not a quality qualification or a replacement for the NFE=32 matrix.",
+  "configuration_current_path": "src/smoke.json"
 }

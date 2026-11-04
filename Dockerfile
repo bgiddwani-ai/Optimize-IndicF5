@@ -21,9 +21,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3-dev \
 RUN git clone https://github.com/AI4Bharat/IndicF5.git /opt/IndicF5 \
     && git -C /opt/IndicF5 checkout --detach 13f7c4d627cc10111aea8fe9c0039462cacacdc7 \
     && rm -rf /opt/IndicF5/.git
-COPY app /opt/indicf5/app
-COPY benchmark /opt/indicf5/benchmark
-COPY tools /opt/indicf5/tools
+COPY src/app /opt/indicf5/app
+COPY src/benchmark /opt/indicf5/benchmark
+COPY src/tools /opt/indicf5/tools
 RUN python3 -c "import app.reference, app.runtime, benchmark.report"
 RUN mkdir -p /data && chown 1000:1000 /data
 USER 1000:1000

@@ -1,0 +1,92 @@
+# run.sh fills the placeholders from IMAGE/RUN_ID, config.json and overrides.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "${NAMESPACE}"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: indicf5-data
+  namespace: "${NAMESPACE}"
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 40Gi
+  ${STORAGE_CLASS}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cfg-${RUN_ID}
+  namespace: "${NAMESPACE}"
+data:
+  config.json: |
+    ${CONFIG_JSON}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "${JOB_NAME}"
+  namespace: "${NAMESPACE}"
+  labels: &labels
+    app.kubernetes.io/name: indicf5
+    indicf5/run: "${RUN_ID}"
+    indicf5/mode: benchmark
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: ${WAIT_TIMEOUT}
+  ttlSecondsAfterFinished: 604800
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      dnsPolicy: ClusterFirst
+      ${RUNTIME_CLASS}
+      ${PULL_SECRET}
+      ${NODE_SELECTOR}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: app
+          image: ${IMAGE}
+          imagePullPolicy: IfNotPresent
+          args: []
+          env:
+            - name: RUN_ID
+              value: "${RUN_ID}"
+            - name: CONFIG_FILE
+              value: /etc/indicf5/config.json
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef: {name: "${HF_SECRET}", key: HF_TOKEN}
+          resources:
+            requests: {cpu: "4", memory: 16Gi, nvidia.com/gpu: 1}
+            limits: {cpu: "8", memory: 32Gi, nvidia.com/gpu: 1}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: data, mountPath: /data}
+            - {name: config, mountPath: /etc/indicf5, readOnly: true}
+            - {name: tmp, mountPath: /tmp}
+            - {name: shm, mountPath: /dev/shm}
+      volumes:
+        - name: data
+          persistentVolumeClaim: {claimName: indicf5-data}
+        - name: config
+          configMap: {name: cfg-${RUN_ID}}
+        - name: tmp
+          emptyDir: {sizeLimit: 8Gi}
+        - name: shm
+          emptyDir: {medium: Memory, sizeLimit: 2Gi}
